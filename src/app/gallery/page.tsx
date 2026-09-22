@@ -18,7 +18,7 @@ const fallbackImages = [
   { id: 5, src: '/intro_hair_styling_female.jpg', title: 'Hair Expertise', category: 'hair' },
 ];
 
-export const revalidate = 60; // Revalidate cache every 60 seconds
+export const dynamic = 'force-dynamic'; // Always fetch fresh data instantly
 
 export default async function GalleryPage() {
   let galleryImages = [];
