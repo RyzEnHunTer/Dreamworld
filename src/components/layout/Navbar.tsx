@@ -1,20 +1,22 @@
 "use client";
 
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-
-const navLinks = [
-  { name: 'ABOUT', href: '/about' },
-  { name: 'SERVICES', href: '/services' },
-  { name: 'PRICING', href: '/pricing' },
-  { name: 'GALLERY', href: '/gallery' },
-  { name: 'ALL PAGES +', href: '/pages' },
-];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  if (pathname?.startsWith('/studio')) return null;
+
+  const navLinks = [
+    { name: 'ABOUT', href: '/about' },
+    { name: 'SERVICES', href: '/services' },
+    { name: 'PRICING', href: '/pricing' },
+    { name: 'GALLERY', href: '/gallery' },
+    { name: 'ALL PAGES +', href: '/pages' },
+  ];
 
   return (
     <nav className="fixed w-full z-50 transition-all duration-300 bg-[var(--color-template-cream)]/90 backdrop-blur-md">

@@ -1,13 +1,19 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/studio')) return null;
+
   return (
     <footer className="w-full bg-[var(--color-template-red)] rounded-t-[3rem] mt-12 px-8 py-24 flex flex-col items-center">
       
       {/* Top CTA */}
       <div className="w-full max-w-5xl mx-auto text-center mb-24">
-        <h2 className="text-[var(--color-template-cream)] font-serif text-3xl sm:text-4xl md:text-7xl lg:text-[90px] font-light leading-[1.1] tracking-tight mb-8 break-words w-full px-2">
+        <h2 className="text-[var(--color-template-cream)] font-serif text-3xl sm:text-4xl md:text-7xl lg:text-[90px] font-light leading-[1.1] tracking-tight mb-8 w-full px-2">
           Your Beauty Journey Starts Here With Unmatched Expertise And Care!
         </h2>
         <p className="text-[var(--color-template-cream)]/80 text-sm md:text-base font-medium max-w-2xl mx-auto mb-12">
@@ -69,12 +75,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center border-t border-[var(--color-template-cream)]/20 pt-8">
-        <span className="text-[var(--color-template-cream)]/50 text-[10px] font-bold tracking-[0.2em] uppercase mb-4 md:mb-0">
-          © Dream World 2026. All Rights Reserved
-        </span>
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center border-t border-[var(--color-template-cream)]/20 pt-8">
         <span className="text-[var(--color-template-cream)]/50 text-[10px] font-bold tracking-[0.2em] uppercase">
-          Replicated & Designed By Antigravity
+          © Dream World 2026. All Rights Reserved
         </span>
       </div>
 
