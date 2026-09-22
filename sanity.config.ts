@@ -9,8 +9,8 @@ import { schemaTypes } from './src/sanity/schemaTypes';
 
 // If you haven't created a project yet, these are placeholder values.
 // You will replace them in your .env.local file once you sign up.
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'dummy-project-id';
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.SANITY_PROJECT_ID || 'dummy-project-id';
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || process.env.SANITY_DATASET || 'production';
 
 export default defineConfig({
   basePath: '/studio', // This is the route where the admin dashboard will live
