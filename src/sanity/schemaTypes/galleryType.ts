@@ -6,6 +6,16 @@ export const galleryType = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      description: 'Upload the photo here. Click the Crop icon in the corner to set the Hotspot!',
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'title',
       title: 'Title / Description',
       type: 'string',
@@ -26,16 +36,6 @@ export const galleryType = defineType({
           { title: 'Other', value: 'other' },
         ],
         layout: 'radio',
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'image',
-      title: 'Image',
-      type: 'image',
-      description: 'Upload the photo here. Click the "Edit" button to set the Hotspot (guaranteed focal point so it never crops weirdly!).',
-      options: {
-        hotspot: true, // This is the feature the user specifically asked for!
       },
       validation: (Rule) => Rule.required(),
     }),
