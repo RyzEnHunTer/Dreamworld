@@ -25,18 +25,9 @@ export const galleryType = defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
+      type: 'reference',
+      to: [{ type: 'galleryCategory' }],
       description: 'Choose which section this image belongs to',
-      options: {
-        list: [
-          { title: 'Bridal', value: 'bridal' },
-          { title: 'Hair Styling', value: 'hair' },
-          { title: 'Spa & Facial', value: 'spa' },
-          { title: 'Mehendi', value: 'mehendi' },
-          { title: 'Other', value: 'other' },
-        ],
-        layout: 'radio',
-      },
       validation: (Rule) => Rule.required(),
     }),
   ],

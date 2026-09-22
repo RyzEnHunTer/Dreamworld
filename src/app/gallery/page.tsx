@@ -1,13 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import { client } from '../../sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
-
-const builder = imageUrlBuilder(client);
-
-function urlFor(source: any) {
-  return builder.image(source);
-}
+import GalleryGrid from '@/components/sections/GalleryGrid';
 
 // Fallback static images if Sanity isn't configured yet
 const fallbackImages = [
@@ -18,14 +11,25 @@ const fallbackImages = [
   { id: 5, src: '/intro_hair_styling_female.jpg', title: 'Hair Expertise', category: 'hair' },
 ];
 
+const fallbackCategories = [
+  { title: 'Bridal', value: 'bridal' },
+  { title: 'Hair Styling', value: 'hair' },
+  { title: 'Spa & Facial', value: 'spa' },
+  { title: 'Other', value: 'other' },
+];
+
 export const dynamic = 'force-dynamic'; // Always fetch fresh data instantly
 
 export default async function GalleryPage() {
   let galleryImages = [];
+  let categories = [];
 
   try {
     // Attempt to fetch from Sanity
-    galleryImages = await client.fetch(`*[_type == "galleryImage"] | order(_createdAt desc)`);
+    // Fetch active categories
+    categories = await client.fetch(`*[_type == "galleryCategory" && isActive == true] | order(title asc)`);
+    // Fetch images and expand category reference
+    galleryImages = await client.fetch(`*[_type == "galleryImage"]{..., category->{title, value}} | order(_createdAt desc)`);
   } catch (error) {
     console.log("Sanity not configured or error fetching. Falling back to static gallery.");
   }
@@ -33,6 +37,7 @@ export default async function GalleryPage() {
   // Use fallback if Sanity is empty or failed
   const isFallback = galleryImages.length === 0;
   const displayImages = isFallback ? fallbackImages : galleryImages;
+  const displayCategories = isFallback ? fallbackCategories : categories;
 
   return (
     <main className="w-full min-h-screen bg-[var(--color-template-cream)] pt-32 pb-24 px-4 md:px-8">
@@ -48,45 +53,13 @@ export default async function GalleryPage() {
           </p>
         </div>
 
-        {/* Masonry Grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-          {displayImages.map((img: any, index: number) => {
-            
-            // Determine image source depending on if it's from Sanity or Fallback
-            const imgSrc = isFallback ? img.src : urlFor(img.image).width(800).url();
-            
-            return (
-              <div 
-                key={isFallback ? img.id : img._id}
-                className="relative break-inside-avoid rounded-2xl overflow-hidden group mb-6"
-              >
-                {/* 
-                  Instead of forcing an aspect ratio (like square), 
-                  we let the image dictate its natural height using an img tag,
-                  or Next/Image with layout="responsive" 
-                */}
-                <Image 
-                  src={imgSrc}
-                  alt={img.title || "Gallery Image"}
-                  width={800}
-                  height={1000} // This is just a base aspect, h-auto overrides it
-                  className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                  <h3 className="text-white font-serif text-2xl font-light">{img.title}</h3>
-                  {img.category && (
-                     <span className="text-white/80 text-[10px] font-bold tracking-widest uppercase mt-2">
-                       {img.category}
-                     </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Client-side Gallery Grid */}
+        <GalleryGrid 
+          displayImages={displayImages} 
+          categories={displayCategories} 
+          isFallback={isFallback} 
+          clientConfig={client.config()} 
+        />
         
         {isFallback && (
           <div className="mt-16 text-center border border-[var(--color-template-red)]/20 p-8 rounded-2xl">

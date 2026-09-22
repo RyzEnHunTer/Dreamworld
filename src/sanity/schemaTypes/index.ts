@@ -1,3 +1,4 @@
-import { galleryType } from './galleryType';
+import { galleryType } from './galleryType'
+import { categoryType } from './categoryType'
 
-export const schemaTypes = [galleryType];
+export const schemaTypes = [galleryType, categoryType];
